@@ -1,0 +1,22 @@
+package com.transport.shedulerservice.tasks;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+
+@Component
+public class SheduleTask {
+
+
+	Logger logger = LoggerFactory.getLogger(SheduleTask.class);
+	
+	RestTemplate restTemplate =new RestTemplate();
+	@Scheduled(fixedRate=10000)
+	public void somejob()
+	{
+		final String dataServiceUrl="http://localhost:3344/requests/status";
+		String str=this.restTemplate.getForObject(dataServiceUrl,String.class);
+		logger.info(str);
+	}
+}

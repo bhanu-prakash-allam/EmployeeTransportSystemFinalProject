@@ -1,0 +1,5 @@
+package com.transport.dataservice.model;
+
+public class DataServiceListModel {
+
+}

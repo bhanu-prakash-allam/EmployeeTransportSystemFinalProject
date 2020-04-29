@@ -1,0 +1,22 @@
+package com.transport.intakeservice.feignproxy;
+
+
+
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import com.example.demo.model.DataServiceModel;
+
+
+
+@FeignClient(name ="data-service", url="localhost:3344")
+
+@Service
+public interface DataserviceProxy {
+	
+	@GetMapping("/requests/{empid}")
+	public DataServiceModel findEmpById(@PathVariable Integer empid);
+}

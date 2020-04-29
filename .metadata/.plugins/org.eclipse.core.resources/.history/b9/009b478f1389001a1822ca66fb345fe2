@@ -1,0 +1,16 @@
+package com.transport.shedulerservice.tasks;
+
+import java.util.Date;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+@Component
+public class SheduleTask {
+
+	@Scheduled(fixedRate=5000)
+	public void somejob()
+	{
+		System.out.println("time is "+new Date());
+	}
+}

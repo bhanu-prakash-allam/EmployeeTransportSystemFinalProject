@@ -1,0 +1,9 @@
+package com.transport.shedulerservice.feignproxy;
+
+import org.springframework.web.bind.annotation.GetMapping;
+
+public interface DataServiceProxy {
+
+	@GetMapping("/test")
+	public void testing();
+}

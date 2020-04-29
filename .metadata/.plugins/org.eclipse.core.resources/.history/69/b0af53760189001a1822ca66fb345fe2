@@ -1,0 +1,30 @@
+package com.transport.dataservice.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.transport.dataservice.entity.EmployeeData;
+import com.transport.dataservice.model.DataServiceModel;
+import com.transport.dataservice.service.Service;
+
+@RestController
+public class DataServiceController {
+
+	@Autowired
+	private Service service;
+	@GetMapping("/requests")
+	public List<EmployeeData> findEmplyeeRequests()
+	{
+		return this.service.findAllRequests();
+		
+	}
+	@GetMapping("/requests/{empid}")
+	public DataServiceModel findEmpById(@PathVariable Integer empid)
+	{
+		return this.service.findEmployee(empid);
+	}
+}

@@ -1,0 +1,22 @@
+package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.feignproxy.DataserviceProxy;
+import com.example.demo.model.DataServiceModel;
+
+@RestController
+public class Controller {
+
+	@Autowired
+	private DataserviceProxy dataserviceProxy;
+	 
+	@GetMapping("/data/{id}")
+	public DataServiceModel getdata(@PathVariable Integer id)
+	{
+		return this.dataserviceProxy.findEmpById(id);
+	}
+}

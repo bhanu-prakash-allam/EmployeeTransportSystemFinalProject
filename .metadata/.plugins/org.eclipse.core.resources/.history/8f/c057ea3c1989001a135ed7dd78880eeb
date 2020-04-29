@@ -1,0 +1,19 @@
+package com.transport.shedulerservice.tasks;
+
+import java.util.Date;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import com.transport.shedulerservice.feignproxy.DataServiceProxy;
+
+@Component
+public class SheduleTask {
+
+private	DataServiceProxy dataServiceProxy;
+	@Scheduled(fixedRate=5000)
+	public void somejob()
+	{
+		System.out.println(this.dataServiceProxy.editStatus());
+	}
+}
