@@ -1,0 +1,56 @@
+<div class="login container mt-4">
+    <div><h1>Employee</h1></div>
+  <form [formGroup]= "myFormGroup"  (ngSubmit)="login()">
+        
+         
+        <div class="form-group row">
+            <label class="col-sm-3">Employee Name</label>
+                 <div class="col-sm-3">
+                     <input type="text" #txtPass name="uname" [formControl]="myFormGroup.controls['username']" class="form-control form-control-sm"  placeholder="Enter EmployeeName" required>
+                 </div>
+                  <div class="col-sm-6">
+                   </div>
+       </div>
+        <div class="form-group row">
+            <label class="col-sm-3">Pick Up</label>
+                <div class="col-sm-3">
+                      <input type="text" #txtPass name="pick" [formControl]="myFormGroup.controls['pickup']" class="form-control form-control-sm"  placeholder="Enter pickup address">
+                 </div>
+                <div class="col-sm-6">
+                 </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3">Drop</label>
+               <div class="col-sm-3">
+                    <input type="text" #txtPass name="drop" [formControl]="myFormGroup.controls['drop']" class="form-control form-control-sm"  placeholder="Enter Drop address">
+                </div>
+                <div class="col-sm-6">
+                 </div>
+         </div>
+         <div class="form-group row">
+             <label class="col-sm-3">vehicle type</label>
+                  <div class="col-sm-3">
+                         <select type="option" #txtPass name="vehicle" [formControl]="myFormGroup.controls['vehicle']" class="form-control form-control-sm"  >
+                                        
+                              <option value="none"> select vehicle </option>
+                              <option value="cab">cab</option>
+                              <option value="minibus">minibus</option>
+                              <option value="staffbus">staffbus</option>
+                               </select>
+                              
+                   </div>
+                   <div class="col-sm-6">
+                   </div>
+         </div>
+          <div class="form-group row">
+            <div class="offset-3 col-sm-9 mt-4">
+                    <input type="submit" class="form-control form-control-sm btn w-25" style="background-color:lightseagreen;" value="submit" >
+            </div>
+         </div>
+     
+
+              
+     </form>
+ </div>
+  
+
