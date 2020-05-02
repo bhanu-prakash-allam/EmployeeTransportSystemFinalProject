@@ -8,9 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import com.transport.dataservice.entity.EmployeeData;
 
+
 @Repository
+
 public interface DataServiceRepository extends JpaRepository<EmployeeData,Integer > {
 
+	
 	@Query("SELECT e FROM EmployeeData e WHERE e.empId=?1")
 	public EmployeeData findByEmpId(Integer Id);
 	

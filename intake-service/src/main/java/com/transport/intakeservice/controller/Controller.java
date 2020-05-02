@@ -1,5 +1,6 @@
 package com.transport.intakeservice.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
-import com.transport.intakeservice.model.DataServiceListModel;
 import com.transport.intakeservice.model.DataServiceModel;
 
 import lombok.AllArgsConstructor;
@@ -38,10 +37,10 @@ public class Controller {
 	@GetMapping("/employee/requests")
 	public List<DataServiceModel> findAllRequests()
 	{
-		
-		DataServiceListModel dataServiceListModel=res.getForObject(allEmpUrl, DataServiceListModel.class);
-		List<DataServiceModel> ldsm=dataServiceListModel.getLdsm();
+		DataServiceModel[] dsm=res.getForObject(allEmpUrl, DataServiceModel[].class);
+		List<DataServiceModel> ldsm=Arrays.asList(dsm);
 		return ldsm;
+	   
 	}
 	
 	@GetMapping("/request/{eid}")

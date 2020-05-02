@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.transport.dataservice.model.DataServiceListModel;
 import com.transport.dataservice.model.DataServiceModel;
 import com.transport.dataservice.service.TransportService;
 
@@ -19,12 +17,10 @@ public class DataServiceController {
 	@Autowired
 	private TransportService transportService;
 	@GetMapping("/requests")
-	public ResponseEntity<DataServiceListModel> findEmplyeeRequests()
+	public ResponseEntity<List<DataServiceModel>> findEmplyeeRequests()
 	{
 		List<DataServiceModel> ldsm= this.transportService.findAllRequests();
-		DataServiceListModel dslm=new DataServiceListModel();
-		dslm.setLdsm(ldsm);
-		ResponseEntity<DataServiceListModel> response=new ResponseEntity<DataServiceListModel>(dslm,HttpStatus.OK);
+		ResponseEntity<List<DataServiceModel>> response=new ResponseEntity<List<DataServiceModel>>(ldsm,HttpStatus.OK);
 		return response;
 		
 	}
