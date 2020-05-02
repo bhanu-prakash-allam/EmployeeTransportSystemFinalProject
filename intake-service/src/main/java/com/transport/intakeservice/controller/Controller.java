@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,18 +14,32 @@ import org.springframework.web.client.RestTemplate;
 import com.transport.intakeservice.model.DataServiceListModel;
 import com.transport.intakeservice.model.DataServiceModel;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 @RestController
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Controller {
 
 	
+	@Autowired
+	private RestTemplate res;
 	
-	RestTemplate res=new RestTemplate();
+	@Value("${dataservice.employeesUrl}")
+	private String allEmpUrl;
+	
+	@Value("${dataservice.employeeIdUrl}")
+	private String oneEmpUrl;
+	
 	@GetMapping("/employee/requests")
 	public List<DataServiceModel> findAllRequests()
 	{
-		final String dataServiceUrl="http://localhost:3344/requests";
-		DataServiceListModel dataServiceListModel=res.getForObject(dataServiceUrl, DataServiceListModel.class);
+		
+		DataServiceListModel dataServiceListModel=res.getForObject(allEmpUrl, DataServiceListModel.class);
 		List<DataServiceModel> ldsm=dataServiceListModel.getLdsm();
 		return ldsm;
 	}
@@ -31,10 +47,10 @@ public class Controller {
 	@GetMapping("/request/{eid}")
 	public DataServiceModel getEmpById(@PathVariable Integer eid)
 	{
-		final String dataServiceUrl="http://localhost:3344/requests/{id}";
+		
 		 Map < String, String > params = new HashMap < String, String > ();
 	        params.put("id", Integer.toString(eid));
-		 DataServiceModel dsm=res.getForObject(dataServiceUrl, DataServiceModel.class,params);
+		 DataServiceModel dsm=res.getForObject(oneEmpUrl, DataServiceModel.class,params);
 		 return dsm;
 	}
 	
