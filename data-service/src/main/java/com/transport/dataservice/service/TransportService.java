@@ -10,6 +10,7 @@ import com.transport.dataservice.entity.EmployeeData;
 import com.transport.dataservice.model.DataServiceModel;
 import com.transport.dataservice.repository.DataServiceRepository;
 
+
 @Service
 public class TransportService {
 	
@@ -39,6 +40,16 @@ public class TransportService {
 				EmployeeData emd=new EmployeeData(em.getId(),em.getEmpId(),em.getPickupLocation(),em.getDropLocation(),"process");
 				this.dataServiceRepository.save(emd);
 		}
+		
+	}
+	public void saveRequest(DataServiceModel dataServiceModel)
+	{
+		EmployeeData emd=new EmployeeData();
+		emd.setEmpId(dataServiceModel.getEmpId());
+		emd.setPickupLocation(dataServiceModel.getPic_upLocation());
+		emd.setDropLocation(dataServiceModel.getDrop_Location());
+		emd.setStatus(dataServiceModel.getStatus());
+		this.dataServiceRepository.save(emd);
 		
 	}
 	

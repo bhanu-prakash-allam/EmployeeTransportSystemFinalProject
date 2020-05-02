@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.transport.dataservice.model.DataServiceModel;
 import com.transport.dataservice.service.TransportService;
@@ -16,6 +18,7 @@ public class DataServiceController {
 
 	@Autowired
 	private TransportService transportService;
+	
 	@GetMapping("/requests")
 	public ResponseEntity<List<DataServiceModel>> findEmplyeeRequests()
 	{
@@ -31,6 +34,12 @@ public class DataServiceController {
 		ResponseEntity<DataServiceModel> response=new ResponseEntity<DataServiceModel>(dsm,HttpStatus.OK);
 		
 		return response;
+	}
+	@PostMapping("/save")
+	public String SaveData(@RequestBody DataServiceModel dataServiceModel)
+	{
+		this.transportService.saveRequest(dataServiceModel);
+		return "data saved";
 	}
 	@GetMapping("/requests/status")
 	public String editStatus()
