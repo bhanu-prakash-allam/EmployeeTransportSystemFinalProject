@@ -1,9 +1,11 @@
 package com.transport.dataservice.service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.transport.dataservice.entity.EmployeeData;
@@ -42,7 +44,8 @@ public class TransportService {
 		}
 		
 	}
-	public void saveRequest(DataServiceModel dataServiceModel)
+	@Async
+	public CompletableFuture<DataServiceModel> saveRequest(DataServiceModel dataServiceModel)
 	{
 		EmployeeData emd=new EmployeeData();
 		emd.setEmpId(dataServiceModel.getEmpId());
@@ -50,7 +53,8 @@ public class TransportService {
 		emd.setDropLocation(dataServiceModel.getDrop_Location());
 		emd.setStatus(dataServiceModel.getStatus());
 		this.dataServiceRepository.save(emd);
-		
+		System.out.println(Thread.currentThread().getName());
+		return  CompletableFuture.completedFuture(dataServiceModel);
 	}
 	
 }
