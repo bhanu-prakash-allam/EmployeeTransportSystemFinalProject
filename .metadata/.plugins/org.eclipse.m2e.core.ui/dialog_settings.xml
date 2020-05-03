@@ -2,7 +2,10 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="C:\Users\Bhanu Prakash\Downloads\EmployeeTransportService\sheduler-service"/>
 			<item value="C:\Users\Bhanu Prakash\Downloads\EmployeeTransportService\data-service"/>
+			<item value="C:\Users\Bhanu Prakash\Downloads\EmployeeTransportService\spring-config-server"/>
+			<item value="C:\Users\Bhanu Prakash\Downloads\EmployeeTransportService\intake-service"/>
 			<item value="E:\EmployeeTransportService\intake-service"/>
 			<item value="E:\EmployeeTransportService\demo"/>
 			<item value="E:\pixogram\mediaplumbing"/>
@@ -21,6 +24,14 @@
 		</list>
 	</section>
 	<section name="org.eclipse.m2e.core.pom.overview">
+		<list key="ciManagementUrl">
+		</list>
+		<list key="ciManagementSystem">
+		</list>
+		<list key="issueManagementSystem">
+		</list>
+		<list key="issueManagementUrl">
+		</list>
 	</section>
 	<section name="org.eclipse.m2e.core.pom.dependencies">
 	</section>

@@ -1,7 +1,12 @@
 package com.transport.dataservice;
 
+import java.util.concurrent.Executor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
@@ -10,6 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
+@EnableAsync
 public class dataServiceConfig {
 	
 	@Bean
@@ -31,6 +37,18 @@ public class dataServiceConfig {
 				"",
 				"",
 				"");
+	}
+	@Bean
+	public Executor taskExecutor()
+	{
+		ThreadPoolTaskExecutor executor=new ThreadPoolTaskExecutor();
+		executor.setCorePoolSize(2);
+		executor.setMaxPoolSize(2);
+		executor.setQueueCapacity(100);
+		executor.setThreadNamePrefix("Thread-");
+		executor.initialize();
+		return executor;
+		
 	}
 	
 }
