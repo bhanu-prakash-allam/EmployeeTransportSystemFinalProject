@@ -1,5 +1,6 @@
 package com.transport.intakeservice.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.transport.intakeservice.model.DataServiceModel;
 
 import lombok.AllArgsConstructor;
@@ -39,7 +42,9 @@ public class Controller {
 	@Value("${dataservice.sendrequest}")
 	private String sendRequest;
 	
+	
 	@GetMapping("/employee/requests")
+	@HystrixCommand(fallbackMethod ="getFallBackMethod")
 	public List<DataServiceModel> findAllRequests()
 	{
 		DataServiceModel[] dsm=res.getForObject(allEmpUrl, DataServiceModel[].class);
@@ -49,6 +54,7 @@ public class Controller {
 	}
 	
 	@GetMapping("/request/{eid}")
+	@HystrixCommand(fallbackMethod ="getEmpFallBackMethod")
 	public DataServiceModel getEmpById(@PathVariable Integer eid)
 	{
 		
@@ -58,9 +64,28 @@ public class Controller {
 		 return dsm;
 	}
 	@PostMapping("/save/employee")
-	public void saveRequest(@RequestBody DataServiceModel dataServiceModel)
+	@HystrixCommand(fallbackMethod ="postEmpFallBackMethod")
+	public String saveRequest(@RequestBody DataServiceModel dataServiceModel)
 	{
-		this.res.postForObject(sendRequest, dataServiceModel, String.class);
+		String str=this.res.postForObject(sendRequest, dataServiceModel, String.class);
+		return str;
+	}
+	
+	public List<DataServiceModel> getFallBackMethod()
+	{
+		List<DataServiceModel> ldsm=new ArrayList<DataServiceModel>();
+		ldsm.add(new DataServiceModel(0000,"No Employee found","Service request failled","to other service"));
+		return ldsm;
+	}
+	
+	public DataServiceModel getEmpFallBackMethod(@PathVariable Integer eid)
+	{
+		return new DataServiceModel(0,"service call failled","","");
+	}
+	
+	public String postEmpFallBackMethod(@RequestBody DataServiceModel dataServiceModel)
+	{
+		return "service call failled";
 	}
 	
 	
