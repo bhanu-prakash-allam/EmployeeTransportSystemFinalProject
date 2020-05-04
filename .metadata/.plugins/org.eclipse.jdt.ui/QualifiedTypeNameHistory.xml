@@ -24,4 +24,13 @@
 <fullyQualifiedTypeName name="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"/>
 <fullyQualifiedTypeName name="java.util.concurrent.CompletableFuture"/>
 <fullyQualifiedTypeName name="org.springframework.scheduling.annotation.Async"/>
+<fullyQualifiedTypeName name="com.transport.dataservice.entity.EmployeeData"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="com.transport.intakeservice.model.EmployeeData"/>
+<fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
+<fullyQualifiedTypeName name="com.transport.intakeservice.service.IntakeServiceInterf"/>
+<fullyQualifiedTypeName name="org.springframework.data.jpa.repository.Modifying"/>
+<fullyQualifiedTypeName name="org.springframework.stereotype.Component"/>
+<fullyQualifiedTypeName name="javax.transaction.Transactional"/>
+<fullyQualifiedTypeName name="com.transport.shedulerservice.tasks.ShedulerServiceInterface"/>
 </qualifiedTypeNameHistroy>
