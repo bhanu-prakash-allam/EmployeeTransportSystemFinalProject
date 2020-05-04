@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.transport.intakeservice.model.DataServiceModel;
+import com.transport.intakeservice.model.EmployeeData;
+import com.transport.intakeservice.service.IntakeServiceInterf;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,6 +34,9 @@ public class IntakeServiceController {
 	@Autowired
 	private RestTemplate res;
 	
+	@Autowired
+	private IntakeServiceInterf intakeServiceInterf;
+	
 	@Value("${dataservice.employeesUrl}")
 	private String allEmpUrl;
 	
@@ -45,47 +49,49 @@ public class IntakeServiceController {
 	
 	@GetMapping("/employee/requests")
 	@HystrixCommand(fallbackMethod ="getFallBackMethod")
-	public List<DataServiceModel> findAllRequests()
+	public List<EmployeeData> findAllRequests()
 	{
-		DataServiceModel[] dsm=res.getForObject(allEmpUrl, DataServiceModel[].class);
-		List<DataServiceModel> ldsm=Arrays.asList(dsm);
-		return ldsm;
+		EmployeeData[] employeeDataArray=res.getForObject(allEmpUrl, EmployeeData[].class);
+		List<EmployeeData> employeeDataList=Arrays.asList(employeeDataArray);
+		
+		List<EmployeeData> filteredEmployeeDataList=this.intakeServiceInterf.findEmployeeRequests(employeeDataList);
+		return filteredEmployeeDataList;
 	   
 	}
 	
 	@GetMapping("/request/{eid}")
 	@HystrixCommand(fallbackMethod ="getEmpFallBackMethod")
-	public DataServiceModel getEmpById(@PathVariable Integer eid)
+	public EmployeeData getEmpById(@PathVariable Integer eid)
 	{
 		
 		 Map < String, String > params = new HashMap < String, String > ();
 	        params.put("id", Integer.toString(eid));
-		 DataServiceModel dsm=res.getForObject(oneEmpUrl, DataServiceModel.class,params);
-		 return dsm;
+	        EmployeeData employeeData=res.getForObject(oneEmpUrl, EmployeeData.class,params);
+		 return employeeData;
 	}
 	@PostMapping("/save/employee")
 	@HystrixCommand(fallbackMethod ="postEmpFallBackMethod")
-	public String saveRequest(@RequestBody DataServiceModel dataServiceModel)
+	public void saveRequest(@RequestBody EmployeeData employeeData)
 	{
-		String str=this.res.postForObject(sendRequest, dataServiceModel, String.class);
-		return str;
+		this.res.postForObject(sendRequest, employeeData,void.class);
+		
 	}
 	
-	public List<DataServiceModel> getFallBackMethod()
+	public List<EmployeeData> getFallBackMethod()
 	{
-		List<DataServiceModel> ldsm=new ArrayList<DataServiceModel>();
-		ldsm.add(new DataServiceModel(0000,"No Employee found","Service request failled","to other service"));
-		return ldsm;
+		List<EmployeeData> employeeDataList =new ArrayList<EmployeeData>();
+		employeeDataList.add(new EmployeeData(1,0000,"No Employee found","Service request failled","to other service"));
+		return employeeDataList;
 	}
 	
-	public DataServiceModel getEmpFallBackMethod(@PathVariable Integer eid)
+	public EmployeeData getEmpFallBackMethod(@PathVariable Integer eid)
 	{
-		return new DataServiceModel(0,"service call failled","","");
+		return new EmployeeData(1,0,"service call failled","","");
 	}
 	
-	public String postEmpFallBackMethod(@RequestBody DataServiceModel dataServiceModel)
+	public void postEmpFallBackMethod(@RequestBody EmployeeData employeeData)
 	{
-		return "service call failled";
+		
 	}
 	
 	

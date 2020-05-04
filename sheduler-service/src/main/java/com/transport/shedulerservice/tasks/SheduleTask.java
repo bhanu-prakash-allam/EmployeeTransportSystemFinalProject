@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SheduleTask {
+public class SheduleTask  implements ShedulerServiceInterface{
 
 	@Value("${dataservice.url}")
 	private String dataServiceUrl;
@@ -24,7 +24,7 @@ public class SheduleTask {
 	RestTemplate restTemplate;
 	
 	@Scheduled(cron ="0 0/1 * 1/1 *  *")
-	public void somejob()
+	public void modifyStatus()
 	{
 		String str=this.restTemplate.getForObject(dataServiceUrl,String.class);
 		log.info(str);

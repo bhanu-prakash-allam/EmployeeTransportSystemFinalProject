@@ -3,6 +3,7 @@ package com.transport.dataservice.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +23,10 @@ public interface DataServiceRepository extends JpaRepository<EmployeeData,Intege
 	
 	@Query("FROM EmployeeData")
 	public List<EmployeeData> findAll();
+	
+	@Modifying
+	@Query("update EmployeeData e set e.status ='process' where e.status='requested'")
+	public void modifyStatus();
 	
 	
 }
