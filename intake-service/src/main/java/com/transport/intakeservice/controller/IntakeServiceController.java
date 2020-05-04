@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Controller {
+public class IntakeServiceController {
 
 	
 	@Autowired

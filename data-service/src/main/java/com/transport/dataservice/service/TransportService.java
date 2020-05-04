@@ -11,26 +11,35 @@ import org.springframework.stereotype.Service;
 import com.transport.dataservice.entity.EmployeeData;
 import com.transport.dataservice.model.DataServiceModel;
 import com.transport.dataservice.repository.DataServiceRepository;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
+@Slf4j
 public class TransportService {
 	
 	@Autowired
 	private DataServiceRepository dataServiceRepository;
 	public List<DataServiceModel> findAllRequests()
 	{
+		log.info(Thread.currentThread().getName());
 		 List<EmployeeData> emp=this.dataServiceRepository.findAll();
-		 List<DataServiceModel> ldsm=emp.stream().map(data->{
+		 for(EmployeeData em:emp)
+			{
+			 log.info(em.getStatus());	
+			}
+	
+		 List<EmployeeData> lemp=emp.stream().filter(data->data.getStatus().equals("requested")).collect(Collectors.toList());
+		 List<DataServiceModel> ldsm=lemp.parallelStream().map(data->{
 			 DataServiceModel dsm=new DataServiceModel(data.getEmpId(),data.getPickupLocation(),data.getDropLocation(),data.getStatus());
 			 return dsm;
 		 }).collect(Collectors.toList());
-		
 		 return ldsm;
 	}
 	public DataServiceModel findEmployee(Integer empid)
 	{
 		EmployeeData emd= this.dataServiceRepository.findByEmpId(empid);
+		log.info(Thread.currentThread().getName());
 		DataServiceModel dsm=new DataServiceModel(emd.getEmpId(),emd.getPickupLocation(),emd.getDropLocation(),emd.getStatus());
 		return dsm;
 	}
@@ -53,7 +62,7 @@ public class TransportService {
 		emd.setDropLocation(dataServiceModel.getDrop_Location());
 		emd.setStatus(dataServiceModel.getStatus());
 		this.dataServiceRepository.save(emd);
-		System.out.println(Thread.currentThread().getName());
+		log.info(Thread.currentThread().getName());
 		return  CompletableFuture.completedFuture(dataServiceModel);
 	}
 	

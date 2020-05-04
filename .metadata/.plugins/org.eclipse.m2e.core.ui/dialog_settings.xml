@@ -2,6 +2,7 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="C:\Users\Bhanu Prakash\Downloads\EmployeeTransportService\Zuul-ApiGateWay"/>
 			<item value="C:\Users\Bhanu Prakash\Downloads\EmployeeTransportService\sheduler-service"/>
 			<item value="C:\Users\Bhanu Prakash\Downloads\EmployeeTransportService\data-service"/>
 			<item value="C:\Users\Bhanu Prakash\Downloads\EmployeeTransportService\spring-config-server"/>

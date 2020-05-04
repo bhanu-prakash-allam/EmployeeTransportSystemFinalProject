@@ -42,9 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http
 			.cors()// auto configures application to use CrossOrigins
 		.and()
-			.csrf().disable() // form security will not conflict
+			.csrf().disable() 
 			.authorizeRequests()
-			//.antMatchers("/user-service/register").permitAll()
 			
 				//.antMatchers("/user-service/login").hasRole("USER")
 				.antMatchers("/Employee").hasRole("EMPLOYEE")

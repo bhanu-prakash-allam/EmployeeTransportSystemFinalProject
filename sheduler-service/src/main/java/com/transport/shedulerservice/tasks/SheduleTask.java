@@ -23,7 +23,7 @@ public class SheduleTask {
 	@Autowired
 	RestTemplate restTemplate;
 	
-	@Scheduled(fixedRate=10000)
+	@Scheduled(cron ="0 0/1 * 1/1 *  *")
 	public void somejob()
 	{
 		String str=this.restTemplate.getForObject(dataServiceUrl,String.class);

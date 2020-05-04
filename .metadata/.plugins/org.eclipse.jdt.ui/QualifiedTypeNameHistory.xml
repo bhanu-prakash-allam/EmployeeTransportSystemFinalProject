@@ -19,4 +19,9 @@
 <fullyQualifiedTypeName name="com.transport.shedulerservice.feignproxy.DataServiceProxy"/>
 <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
 <fullyQualifiedTypeName name="org.springframework.web.client.RestTemplate"/>
+<fullyQualifiedTypeName name="org.springframework.scheduling.annotation.EnableAsync"/>
+<fullyQualifiedTypeName name="java.util.concurrent.Executor"/>
+<fullyQualifiedTypeName name="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"/>
+<fullyQualifiedTypeName name="java.util.concurrent.CompletableFuture"/>
+<fullyQualifiedTypeName name="org.springframework.scheduling.annotation.Async"/>
 </qualifiedTypeNameHistroy>
