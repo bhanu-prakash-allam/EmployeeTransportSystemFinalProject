@@ -2,18 +2,7 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
-			<item value="C:\Users\Bhanu Prakash\Downloads\EmployeeTransportService\Zuul-ApiGateWay"/>
-			<item value="C:\Users\Bhanu Prakash\Downloads\EmployeeTransportService\sheduler-service"/>
-			<item value="C:\Users\Bhanu Prakash\Downloads\EmployeeTransportService\intake-service"/>
-			<item value="C:\Users\Bhanu Prakash\Downloads\EmployeeTransportService\spring-config-server"/>
 			<item value="C:\Users\Bhanu Prakash\Downloads\EmployeeTransportService\data-service"/>
-			<item value="E:\EmployeeTransportService\intake-service"/>
-			<item value="E:\EmployeeTransportService\demo"/>
-			<item value="E:\pixogram\mediaplumbing"/>
-			<item value="E:\pixogram\discovery-server"/>
-			<item value="E:\EmployeeTransportService\sheduler-service"/>
-			<item value="E:\EmployeeTransportService\data-service"/>
-			<item value="E:\EmployeeTransportService\spring-config-server"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
@@ -23,23 +12,5 @@
 			<item value="[groupId].[artifactId]-[version]"/>
 			<item value="[name]"/>
 		</list>
-	</section>
-	<section name="org.eclipse.m2e.core.pom.overview">
-		<list key="ciManagementUrl">
-		</list>
-		<list key="ciManagementSystem">
-		</list>
-		<list key="issueManagementSystem">
-		</list>
-		<list key="issueManagementUrl">
-		</list>
-	</section>
-	<section name="org.eclipse.m2e.core.pom.dependencies">
-	</section>
-	<section name="org.eclipse.m2e.core.ui.internal.dialogs.MavenRepositorySearchDialog">
-		<item key="width" value="480"/>
-		<item key="height" value="531"/>
-		<item key="x" value="443"/>
-		<item key="y" value="10"/>
 	</section>
 </section>
