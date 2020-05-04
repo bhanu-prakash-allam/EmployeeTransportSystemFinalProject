@@ -44,11 +44,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.and()
 			.csrf().disable() // form security will not conflict
 			.authorizeRequests()
-			//.antMatchers("/user-service/register").permitAll()
-			
+			   //.antMatchers("/user-service/register").permitAll()
 				//.antMatchers("/user-service/login").hasRole("USER")
-				.antMatchers("/Employee").hasRole("EMPLOYEE")
-				.antMatchers("Admin").hasAnyRole("EMPLOYEE","ADMIN")
+			
+				.antMatchers("/data-service/employee").hasRole("EMPLOYEE")
+				.antMatchers("/data-service/admin").hasAnyRole("ADMIN")
 				// add other antmatcher of plumbing MS
 				
 		.and()
