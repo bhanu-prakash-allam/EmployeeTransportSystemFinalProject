@@ -5,7 +5,7 @@ import java.util.List;
 import com.transport.intakeservice.model.EmployeeData;
 
 
-public interface IntakeServiceInterf {
+public interface IntakeServiceInterface {
 	
 	public List<EmployeeData> findEmployeeRequests(List<EmployeeData> employeeDataList);
 }

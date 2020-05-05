@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.transport.intakeservice.model.EmployeeData;
-import com.transport.intakeservice.service.IntakeServiceInterf;
+import com.transport.intakeservice.service.IntakeServiceInterface;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +37,7 @@ public class IntakeServiceController {
 	private RestTemplate res;
 	
 	@Autowired
-	private IntakeServiceInterf intakeServiceInterf;
+	private IntakeServiceInterface intakeServiceInterface;
 	
 	@Value("${dataservice.employeesUrl}")
 	private String allEmpUrl;
@@ -54,7 +56,7 @@ public class IntakeServiceController {
 		EmployeeData[] employeeDataArray=res.getForObject(allEmpUrl, EmployeeData[].class);
 		List<EmployeeData> employeeDataList=Arrays.asList(employeeDataArray);
 		
-		List<EmployeeData> filteredEmployeeDataList=this.intakeServiceInterf.findEmployeeRequests(employeeDataList);
+		List<EmployeeData> filteredEmployeeDataList=this.intakeServiceInterface.findEmployeeRequests(employeeDataList);
 		return filteredEmployeeDataList;
 	   
 	}
@@ -71,10 +73,10 @@ public class IntakeServiceController {
 	}
 	@PostMapping("/save/employee")
 	@HystrixCommand(fallbackMethod ="postEmpFallBackMethod")
-	public void saveRequest(@RequestBody EmployeeData employeeData)
+	public ResponseEntity<EmployeeData> saveRequest(@RequestBody EmployeeData employeeData)
 	{
-		this.res.postForObject(sendRequest, employeeData,void.class);
-		
+		EmployeeData employeeDataResponse=this.res.postForObject(sendRequest, employeeData, EmployeeData.class);
+		return new ResponseEntity<EmployeeData>(employeeDataResponse,HttpStatus.OK);
 	}
 	
 	public List<EmployeeData> getFallBackMethod()
@@ -89,8 +91,9 @@ public class IntakeServiceController {
 		return new EmployeeData(1,0,"service call failled","","");
 	}
 	
-	public void postEmpFallBackMethod(@RequestBody EmployeeData employeeData)
+	public  ResponseEntity<EmployeeData> postEmpFallBackMethod(@RequestBody EmployeeData employeeData)
 	{
+		return new ResponseEntity<EmployeeData>(new EmployeeData( 0,0,"service call failld","",""),HttpStatus.SERVICE_UNAVAILABLE);
 		
 	}
 	

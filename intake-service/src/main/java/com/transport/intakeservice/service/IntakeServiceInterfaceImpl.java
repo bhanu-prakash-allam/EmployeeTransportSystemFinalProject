@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import com.transport.intakeservice.model.EmployeeData;
 
 @Component
-public class IntakeServiceInterfImpl implements IntakeServiceInterf {
+public class IntakeServiceInterfaceImpl implements IntakeServiceInterface {
 
 	@Override
 	public List<EmployeeData> findEmployeeRequests(List<EmployeeData> employeeDataList)
