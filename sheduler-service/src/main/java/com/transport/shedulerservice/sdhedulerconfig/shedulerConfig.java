@@ -1,4 +1,4 @@
-package com.transport.shedulerservice;
+package com.transport.shedulerservice.sdhedulerconfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

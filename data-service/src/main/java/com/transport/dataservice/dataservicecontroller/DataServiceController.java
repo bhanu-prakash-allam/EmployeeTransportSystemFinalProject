@@ -1,4 +1,4 @@
-package com.transport.dataservice.controller;
+package com.transport.dataservice.dataservicecontroller;
 
 import java.util.List;
 
@@ -14,69 +14,46 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.transport.dataservice.dataservice.DataServiceInterface;
 import com.transport.dataservice.entity.EmployeeData;
 import com.transport.dataservice.exception.RequestErrorResponse;
 import com.transport.dataservice.exception.RequestNotFoundException;
-import com.transport.dataservice.repository.DataServiceRepository;
-
+import com.transport.dataservice.exception.UrlNotFoundException;
 
 @RestController
 @Transactional
 public class DataServiceController {
-
 	
 	@Autowired
-	private DataServiceRepository dataServiceRepository;
+    private DataServiceInterface dataServiceInterface;
+	
 	@GetMapping("/requests")
 	public ResponseEntity<List<EmployeeData>> findEmplyeeRequests()
 	{
-		List<EmployeeData> employeeDataList=this.dataServiceRepository.findAll();
-		if(employeeDataList.size()>0)
-		{
-			ResponseEntity<List<EmployeeData>> response=new ResponseEntity<List<EmployeeData>>(employeeDataList,HttpStatus.OK);
-			return response;
-		}
-		else
-			throw new RequestNotFoundException("No Employee Record Found");
 		
+		return new ResponseEntity<List<EmployeeData>>(this.dataServiceInterface.findAllRequests(),HttpStatus.OK);
 		
 	}
+	
 	@GetMapping("/requests/{empid}")
 	public ResponseEntity<EmployeeData> findEmpById(@PathVariable Integer empid)
 	{
 		
-		EmployeeData employeeData=this.dataServiceRepository.findByEmpId(empid);
-		if(employeeData!=null)
-		{
-		ResponseEntity<EmployeeData> response=new ResponseEntity<EmployeeData>(employeeData,HttpStatus.OK);
-		return response;
-		}
-		
-		else
-			throw new RequestNotFoundException("No request Available for this Id");
-		
-			
-		
+		return new ResponseEntity<EmployeeData>(this.dataServiceInterface.findRequestByEmpId(empid),HttpStatus.OK);		
 		
 	}
 	@PostMapping("/save")
 	public ResponseEntity<EmployeeData> saveData(@RequestBody EmployeeData employeeData)
 	{
-		if(employeeData.getDropLocation()!=null||employeeData.getPickupLocation()!=null)
-		{
-			this.dataServiceRepository.save(employeeData);
-			return new ResponseEntity<EmployeeData>(employeeData,HttpStatus.OK);
-		}
-		else
-			throw new RuntimeException("Could not add record!!!");
-		
+	 
+		return new ResponseEntity<EmployeeData>(this.dataServiceInterface.saveEmployeeRequest(employeeData),HttpStatus.OK);
 		
 	}
 	@GetMapping("/edit/status")
 	public String editStatus()
 	{
-		this.dataServiceRepository.modifyStatus();
-		return "status changed";
+		this.dataServiceInterface.changeStatus();
+		return "changed";
 	}
 	
 	@ExceptionHandler 
@@ -94,7 +71,18 @@ public class DataServiceController {
 															  HttpStatus.BAD_REQUEST.value(), 
 															  System.currentTimeMillis());
 		ResponseEntity<RequestErrorResponse> response =
-										new ResponseEntity<RequestErrorResponse>(error, HttpStatus.NOT_FOUND);
+										new ResponseEntity<RequestErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		
+		return response;
+	}
+	@ExceptionHandler  
+	public ResponseEntity<RequestErrorResponse> UrlErrorHAndler(UrlNotFoundException ex) {
+		
+		RequestErrorResponse error = new RequestErrorResponse(ex.toString(), 
+															  HttpStatus.BAD_REQUEST.value(), 
+															  System.currentTimeMillis());
+		ResponseEntity<RequestErrorResponse> response =
+										new ResponseEntity<RequestErrorResponse>(error, HttpStatus.BAD_REQUEST);
 		
 		return response;
 	}

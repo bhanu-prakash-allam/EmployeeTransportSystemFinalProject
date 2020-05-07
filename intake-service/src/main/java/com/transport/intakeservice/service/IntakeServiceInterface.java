@@ -8,4 +8,10 @@ import com.transport.intakeservice.model.EmployeeData;
 public interface IntakeServiceInterface {
 	
 	public List<EmployeeData> findEmployeeRequests(List<EmployeeData> employeeDataList);
+	
+	public List<EmployeeData> getAllRequests();
+	
+	public EmployeeData findEmployeeById(Integer eid);
+	
+	public EmployeeData saveEmployeeRequest(EmployeeData employeeData);
 }

@@ -23,10 +23,10 @@ public class SheduleTask  implements ShedulerServiceInterface{
 	@Autowired
 	RestTemplate restTemplate;
 	
-	@Scheduled(cron ="0 0/1 * 1/1 *  *")
+	@Scheduled(cron ="${cron.exp}")
 	public void modifyStatus()
 	{
-		String str=this.restTemplate.getForObject(dataServiceUrl,String.class);
-		log.info(str);
+		String flag=this.restTemplate.getForObject(dataServiceUrl,String.class);
+		log.info(flag);
 	}
 }
