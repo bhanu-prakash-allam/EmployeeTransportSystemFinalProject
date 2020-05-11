@@ -15,4 +15,6 @@ public interface DataServiceInterface {
 	public boolean changeStatus();
 	
 	public  Boolean deleteRequest(Integer id);
+	
+	public void modifyBatchRequests(List<EmployeeData> requestData);
 }

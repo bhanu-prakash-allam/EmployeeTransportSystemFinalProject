@@ -1,4 +1,7 @@
+
 package com.transport.shedulerservice.model;
+
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,11 +10,21 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DataServiceModel {
+public class EmployeeData {
+
+	
+	private Integer Id;
+	
 	
 	private Integer empId;
-	private String pic_upLocation;
-	private String drop_Location;
-	private String status;
 	
+	
+	private String pickupLocation;
+
+	
+	private String dropLocation;
+
+	
+	private String status;
+
 }

@@ -2,6 +2,7 @@ package com.transport.dataservice.dataservicecontroller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.transport.dataservice.dataservice.DataServiceInterface;
 import com.transport.dataservice.entity.EmployeeData;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 
 @RestController
 @Transactional
+@Slf4j
 public class DataServiceController {
 	
 	@Autowired
@@ -29,6 +33,7 @@ public class DataServiceController {
 	public ResponseEntity<List<EmployeeData>> findEmplyeeRequests()
 	{
 		
+		log.info("user requested"+Thread.currentThread().getName());
 		return new ResponseEntity<List<EmployeeData>>(this.dataServiceInterface.findAllRequests(),HttpStatus.OK);
 		
 	}
@@ -37,6 +42,7 @@ public class DataServiceController {
 	public ResponseEntity<EmployeeData> findEmpById(@PathVariable Integer empid)
 	{
 		
+		//log.info("user requested"+Thread.currentThread().getName()+"the user is "+request.getHeader("Autherization"));
 		return new ResponseEntity<EmployeeData>(this.dataServiceInterface.findRequestByEmpId(empid),HttpStatus.OK);		
 		
 	}
@@ -51,6 +57,14 @@ public class DataServiceController {
 	public Boolean deleteRequest(@PathVariable Integer empId)
 	{
 		return this.dataServiceInterface.deleteRequest(empId);
+	}
+	
+	@PostMapping("/change/batchRequests")
+	public ResponseEntity<String> autoApproveRequest(@RequestBody List<EmployeeData> modifyData)
+	{
+		this.dataServiceInterface.modifyBatchRequests(modifyData);
+		
+		return new ResponseEntity<String>("all requested modified",HttpStatus.OK);
 	}
 	@GetMapping("/edit/status")
 	public String editStatus()

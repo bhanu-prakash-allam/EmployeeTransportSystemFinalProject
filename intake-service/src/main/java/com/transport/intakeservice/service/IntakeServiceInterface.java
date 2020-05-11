@@ -7,7 +7,7 @@ import com.transport.intakeservice.model.EmployeeData;
 
 public interface IntakeServiceInterface {
 	
-	public List<EmployeeData> findEmployeeRequests(List<EmployeeData> employeeDataList);
+	public List<EmployeeData> filterEmployeeRequests(List<EmployeeData> employeeDataList);
 	
 	public List<EmployeeData> getAllRequests();
 	
@@ -16,4 +16,5 @@ public interface IntakeServiceInterface {
 	public EmployeeData saveEmployeeRequest(EmployeeData employeeData);
 	
 	public boolean deleteEmployeeRequest(Integer id);
+
 }

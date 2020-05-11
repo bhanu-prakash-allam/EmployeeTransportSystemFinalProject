@@ -3,18 +3,30 @@ package com.transport.dataservice.dataservice;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ParameterizedPreparedStatementSetter;
 import org.springframework.stereotype.Service;
 
 import com.transport.dataservice.entity.EmployeeData;
 import com.transport.dataservice.exception.RequestNotFoundException;
 import com.transport.dataservice.repository.DataServiceRepository;
 
+import lombok.Data;
+
 @Service
+@Data
 public class DataServiceInterfaceImpl implements DataServiceInterface {
 
 	
 	@Autowired
 	private DataServiceRepository dataServiceRepository;
+	
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+	
+	//@Value("spring.update")
+	String query="UPDATE employee_data SET status='process' WHERE emp_id=?";
 	
 	@Override
 	public List<EmployeeData> findAllRequests() {
@@ -66,6 +78,13 @@ public class DataServiceInterfaceImpl implements DataServiceInterface {
 	 this.dataServiceRepository.deleteEmployeeRequest(id);
 	 
 	 return true;
+	}
+
+	@Override
+	public void modifyBatchRequests(List<EmployeeData> requestData) {
+		 int batchSize=50;
+		 ParameterizedPreparedStatementSetter<EmployeeData> parameterizedPreparedStatementSetter = (ps,req) -> {ps.setInt(1, req.getEmpId());};
+			jdbcTemplate.batchUpdate(query, requestData, batchSize, parameterizedPreparedStatementSetter);
 	}
 
 }

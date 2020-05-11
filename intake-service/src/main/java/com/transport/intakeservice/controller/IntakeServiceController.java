@@ -41,7 +41,7 @@ public class IntakeServiceController {
 	   return new ResponseEntity<List<EmployeeData>>(this.intakeServiceInterface.getAllRequests(),HttpStatus.OK);
 	}
 	
-	@HystrixCommand(fallbackMethod ="getRequestByIdFallBackMethod")
+	@HystrixCommand(fallbackMethod ="getRequestByIdFallBackMethod",ignoreExceptions =RequestNotFoundException.class)
 	@GetMapping("/request/{eid}")
 	public ResponseEntity<EmployeeData> getEmpById(@PathVariable Integer eid)
 	{
@@ -49,7 +49,7 @@ public class IntakeServiceController {
 		return new ResponseEntity<EmployeeData>(this.intakeServiceInterface.findEmployeeById(eid),HttpStatus.OK);
 	}
 	
-	@HystrixCommand(fallbackMethod ="postEmpFallBackMethod")
+	@HystrixCommand(fallbackMethod ="postEmpFallBackMethod",ignoreExceptions =RuntimeException.class)
 	@PostMapping("/save/request")
 	public ResponseEntity<EmployeeData> saveRequest(@RequestBody EmployeeData employeeData)
 	{
