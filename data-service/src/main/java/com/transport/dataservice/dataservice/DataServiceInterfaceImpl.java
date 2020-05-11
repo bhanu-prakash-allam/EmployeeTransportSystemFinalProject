@@ -51,12 +51,21 @@ public class DataServiceInterfaceImpl implements DataServiceInterface {
 		 else
 			throw new RuntimeException("Could not add record!!!");
 	}
+	
 
 	@Override
 	public boolean changeStatus() {
 		
 		this.dataServiceRepository.modifyStatus();
 		return true;
+	}
+
+	@Override
+	public Boolean deleteRequest(Integer id) {
+		
+	 this.dataServiceRepository.deleteEmployeeRequest(id);
+	 
+	 return true;
 	}
 
 }

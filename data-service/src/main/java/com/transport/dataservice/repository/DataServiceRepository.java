@@ -22,5 +22,6 @@ public interface DataServiceRepository extends JpaRepository<EmployeeData,Intege
 	@Modifying
 	public void modifyStatus();
 	
-	
+	@Modifying
+	public void deleteEmployeeRequest(Integer empId);
 }

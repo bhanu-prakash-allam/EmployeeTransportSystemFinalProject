@@ -1,5 +1,0 @@
-package com.transport.shedulerservice.feignproxy;
-
-public interface DataServiceProxy {
-
-}

@@ -1,6 +1,7 @@
 package com.transport.shedulerservice.tasks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -24,6 +25,7 @@ public class SheduleTask  implements ShedulerServiceInterface{
 	RestTemplate restTemplate;
 	
 	@Scheduled(cron ="${cron.exp}")
+	@Async
 	public void modifyStatus()
 	{
 		String flag=this.restTemplate.getForObject(dataServiceUrl,String.class);

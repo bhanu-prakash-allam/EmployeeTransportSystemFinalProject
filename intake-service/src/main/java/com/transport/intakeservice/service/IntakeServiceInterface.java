@@ -14,4 +14,6 @@ public interface IntakeServiceInterface {
 	public EmployeeData findEmployeeById(Integer eid);
 	
 	public EmployeeData saveEmployeeRequest(EmployeeData employeeData);
+	
+	public boolean deleteEmployeeRequest(Integer id);
 }

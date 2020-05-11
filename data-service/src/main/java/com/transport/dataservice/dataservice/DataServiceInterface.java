@@ -13,4 +13,6 @@ public interface DataServiceInterface {
 	public EmployeeData saveEmployeeRequest(EmployeeData employeeData);
 	
 	public boolean changeStatus();
+	
+	public  Boolean deleteRequest(Integer id);
 }
