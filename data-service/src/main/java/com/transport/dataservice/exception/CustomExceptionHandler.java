@@ -12,34 +12,27 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
 
-	@ExceptionHandler 
+	@ExceptionHandler(RequestNotFoundException.class)
 	public ResponseEntity<RequestErrorResponse> requestNotFoundHandler(RequestNotFoundException ex) {
 		RequestErrorResponse error = new RequestErrorResponse(ex.getMessage(),HttpStatus.NOT_FOUND.value(),System.currentTimeMillis());
-		ResponseEntity<RequestErrorResponse> response =
-										new ResponseEntity<RequestErrorResponse>(error, HttpStatus.NOT_FOUND);
 		
-		return response;
+		return new ResponseEntity<RequestErrorResponse>(error, HttpStatus.NOT_FOUND);
 	}
-	@ExceptionHandler  
+	@ExceptionHandler(Exception.class) 
 	public ResponseEntity<RequestErrorResponse> employeeOperationErrorHAndler(Exception ex) {
 		
 		RequestErrorResponse error = new RequestErrorResponse(ex.getMessage(), 
 															  HttpStatus.BAD_REQUEST.value(), 
 															  System.currentTimeMillis());
-		ResponseEntity<RequestErrorResponse> response =
-										new ResponseEntity<RequestErrorResponse>(error, HttpStatus.BAD_REQUEST);
 		
-		return response;
+		
+		return new ResponseEntity<RequestErrorResponse>(error, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	public final ResponseEntity<RequestErrorResponse> handleMethodArgumentTypeMismatchException(Exception ex){
+	public final ResponseEntity<RequestErrorResponse> methodArgumentTypeMismatchException(Exception ex){
 		RequestErrorResponse error = new RequestErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value(),  System.currentTimeMillis());
 		return new ResponseEntity<RequestErrorResponse>(error,HttpStatus.BAD_REQUEST);
 	}
-//	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-//	protected ResponseEntity<RequestErrorResponse> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex){
-//		RequestErrorResponse response = new RequestErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value(),  System.currentTimeMillis());
-//		return new ResponseEntity<RequestErrorResponse>(response,HttpStatus.OK);
-//	}
+
 }

@@ -2,18 +2,19 @@ package com.transport.intakeservice.service;
 
 import java.util.List;
 
-import com.transport.intakeservice.model.EmployeeData;
+import com.transport.intakeservice.model.DataServiceModel;
+
 
 
 public interface IntakeServiceInterface {
 	
-	public List<EmployeeData> filterEmployeeRequests(List<EmployeeData> employeeDataList);
+	public List<DataServiceModel> filterEmployeeRequests(List<DataServiceModel> employeeDataList);
 	
-	public List<EmployeeData> getAllRequests();
+	public List<DataServiceModel> getAllRequests();
 	
-	public EmployeeData findEmployeeById(Integer eid);
+	public DataServiceModel findEmployeeById(Integer eid);
 	
-	public EmployeeData saveEmployeeRequest(EmployeeData employeeData);
+	public DataServiceModel saveEmployeeRequest(DataServiceModel employeeData);
 	
 	public boolean deleteEmployeeRequest(Integer id);
 

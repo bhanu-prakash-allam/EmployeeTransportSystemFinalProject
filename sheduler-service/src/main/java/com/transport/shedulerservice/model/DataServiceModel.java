@@ -1,4 +1,4 @@
-package com.transport.intakeservice.model;
+package com.transport.shedulerservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -18,7 +18,7 @@ public class EmployeeData {
 
 	@Id
 	@GeneratedValue(strategy =GenerationType.IDENTITY)
-	private Integer Id;
+	private Integer id;
 	
 	@Column
 	private Integer empId;

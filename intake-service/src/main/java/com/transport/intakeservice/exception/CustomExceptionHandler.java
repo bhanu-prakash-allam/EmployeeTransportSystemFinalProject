@@ -15,10 +15,8 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
 	@ExceptionHandler 
 	public ResponseEntity<RequestErrorResponse> requestNotFoundHandler(RequestNotFoundException ex) {
 		RequestErrorResponse error = new RequestErrorResponse(ex.getMessage(),HttpStatus.NOT_FOUND.value(),System.currentTimeMillis());
-		ResponseEntity<RequestErrorResponse> response =
-										new ResponseEntity<RequestErrorResponse>(error, HttpStatus.NOT_FOUND);
-		
-		return response;
+
+		return new ResponseEntity<RequestErrorResponse>(error, HttpStatus.NOT_FOUND);
 	}
 	@ExceptionHandler  
 	public ResponseEntity<RequestErrorResponse> employeeOperationErrorHAndler(Exception ex) {
@@ -26,10 +24,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
 		RequestErrorResponse error = new RequestErrorResponse(ex.getMessage(), 
 															  HttpStatus.BAD_REQUEST.value(), 
 															  System.currentTimeMillis());
-		ResponseEntity<RequestErrorResponse> response =
-										new ResponseEntity<RequestErrorResponse>(error, HttpStatus.BAD_REQUEST);
 		
-		return response;
+		return new ResponseEntity<RequestErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		
 	}
 	
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)

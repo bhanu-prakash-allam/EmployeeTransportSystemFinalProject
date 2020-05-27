@@ -1,6 +1,7 @@
 package com.transport.shedulerservice.sheduletasks;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,8 @@ public class SheduleTask {
 	ShedulerServiceInterface shedulerServiceInterface;
 	
 	@Scheduled(cron = "${cron.exp}")
-	public void AutoApproveRequests()
+	@Async
+	public void autoApproveRequests()
 	{
 	
 		log.info("started");

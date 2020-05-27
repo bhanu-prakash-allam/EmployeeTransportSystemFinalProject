@@ -6,81 +6,70 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.transport.intakeservice.exception.RequestNotFoundException;
-import com.transport.intakeservice.model.EmployeeData;
+import com.transport.intakeservice.intakeserviceconfig.IntakeConfig;
+import com.transport.intakeservice.model.DataServiceModel;
 
-import lombok.Data;
-@Data
-@Component
+@Service
 public class IntakeServiceInterfaceImpl implements IntakeServiceInterface {
 	
-	
+
 	@Autowired
 	private RestTemplate restTemplate;
 	
 	@Autowired
 	private IntakeServiceInterface intakeServiceInterface;
 	
-	@Value("${dataservice.employeesUrl}")
-	private String allEmpUrl;
+	@Autowired
+	private IntakeConfig properties;
 	
-	@Value("${dataservice.employeeIdUrl}")
-	private String oneEmpUrl;
-	
-	@Value("${dataservice.sendrequest}")
-	private String sendRequest;
-	
-	@Value("${dataservice.deleterequest}")
-	private String deleteRequest;
-
 	@Override
-	//Filters the data whose status is requested
-	public List<EmployeeData> filterEmployeeRequests(List<EmployeeData> employeeDataList)
+	public List<DataServiceModel> filterEmployeeRequests(List<DataServiceModel> employeeDataList)
 	{
 		
-		List<EmployeeData> filteredEmployeeDataList=employeeDataList.stream().filter(data->data.getStatus().equals("requested")).collect(Collectors.toList());
+		List<DataServiceModel> filteredEmployeeDataList=employeeDataList.stream().filter(data->data.getStatus().equals("requested")).collect(Collectors.toList());
 		
 		
-		if(filteredEmployeeDataList.size()>0) {
+		if(filteredEmployeeDataList.isEmpty()) {
 			
-				return filteredEmployeeDataList;
-		}
-		else
 			
 			throw new RequestNotFoundException("No Employee Requested yet");
+		}
+		else
+			return filteredEmployeeDataList;
+			
 	}
 
 
 	@Override
-	public List<EmployeeData> getAllRequests() {
+	public List<DataServiceModel> getAllRequests() {
 		
 		HttpHeaders header=new HttpHeaders();
-		header.setBasicAuth("bhanu", "123");
-		HttpEntity<EmployeeData> request=new HttpEntity<EmployeeData>(header);
+		header.setBasicAuth(properties.getUsername(),properties.getPassword());
+		HttpEntity<DataServiceModel> request=new HttpEntity<DataServiceModel>(header);
 		
-		EmployeeData[] employeeDataArray= restTemplate.exchange(allEmpUrl, HttpMethod.GET,request, EmployeeData[].class).getBody();
-		List<EmployeeData> employeeDataList=Arrays.asList(employeeDataArray);
-		List<EmployeeData> filteredEmployeeDataList=this.intakeServiceInterface.filterEmployeeRequests(employeeDataList);
-		return filteredEmployeeDataList;
+		DataServiceModel[] dataServiceModelArray= restTemplate.exchange(properties.getAllEmpUrl(), HttpMethod.GET,request, DataServiceModel[].class).getBody();
+		List<DataServiceModel> employeeDataList=Arrays.asList(dataServiceModelArray);
+		
+		return this.intakeServiceInterface.filterEmployeeRequests(employeeDataList);
 		
 	}
-	
 	@Override
-	public EmployeeData findEmployeeById(Integer eid) {
+	public DataServiceModel findEmployeeById(Integer eid) {
 		
-		HttpHeaders header=new HttpHeaders();
-		header.setBasicAuth("bhanu", "123");
+		 HttpHeaders header=new HttpHeaders();
+		 header.setBasicAuth(properties.getUsername(),properties.getPassword());
 		 Map < String, String > params = new HashMap <String,String> ();
-	        params.put("id", Integer.toString(eid));
-		HttpEntity<EmployeeData> request=new HttpEntity<EmployeeData>(header);
-		 if(restTemplate.exchange(oneEmpUrl, HttpMethod.GET,request, EmployeeData.class,params).getBody()!=null)
-				return restTemplate.exchange(oneEmpUrl, HttpMethod.GET,request, EmployeeData.class,params).getBody();
+	     params.put("id", Integer.toString(eid));
+		 HttpEntity<DataServiceModel> request=new HttpEntity<DataServiceModel>(header);
+		
+		 if(restTemplate.exchange(properties.getOneEmpUrl(), HttpMethod.GET,request, DataServiceModel.class,params).getBody()!=null)
+				return restTemplate.exchange(properties.getOneEmpUrl(), HttpMethod.GET,request, DataServiceModel.class,params).getBody();
 		 else
 				 throw new RequestNotFoundException("No Employee requested on this "+eid);
 				
@@ -89,16 +78,16 @@ public class IntakeServiceInterfaceImpl implements IntakeServiceInterface {
 
 	
 	@Override
-	public EmployeeData saveEmployeeRequest(EmployeeData employeeData) {
+	public DataServiceModel saveEmployeeRequest(DataServiceModel employeeData) {
 		HttpHeaders header=new HttpHeaders();
-		header.setBasicAuth("bhanu", "123");
-		if(employeeData.getDropLocation()!=null||employeeData.getPickupLocation()!=null)
+		header.setBasicAuth(properties.getUsername(),properties.getPassword());
+		if(employeeData.getDropLocation()!=null&&employeeData.getPicupLocation()!=null)
 		{
-			HttpEntity<EmployeeData> request=new HttpEntity<EmployeeData>(employeeData,header);
-			return restTemplate.exchange(sendRequest, HttpMethod.POST,request, EmployeeData.class).getBody();
+			HttpEntity<DataServiceModel> request=new HttpEntity<DataServiceModel>(employeeData,header);
+			return restTemplate.exchange(properties.getSendRequest(), HttpMethod.POST,request, DataServiceModel.class).getBody();
 		}
 		else
-			throw new RuntimeException("could not add record..!");
+			throw new RuntimeException("fill pickup and drop locations..!");
 		
 	}
 
@@ -107,12 +96,12 @@ public class IntakeServiceInterfaceImpl implements IntakeServiceInterface {
 	public boolean deleteEmployeeRequest(Integer id) {
 		
 		HttpHeaders header=new HttpHeaders();
-		header.setBasicAuth("bhanu", "123");
-		HttpEntity<EmployeeData> request=new HttpEntity<EmployeeData>(header);
+		header.setBasicAuth(properties.getUsername(),properties.getPassword());
+		HttpEntity<DataServiceModel> request=new HttpEntity<DataServiceModel>(header);
 		 Map < String, String > params = new HashMap <String,String> ();
 	        params.put("empId", Integer.toString(id));
 	        
-	   return restTemplate.exchange(deleteRequest, HttpMethod.DELETE,request, Boolean.class,params).getBody();
+	   return restTemplate.exchange(properties.getDeleteRequest(), HttpMethod.DELETE,request, Boolean.class,params).getBody();
 	}
 
 	

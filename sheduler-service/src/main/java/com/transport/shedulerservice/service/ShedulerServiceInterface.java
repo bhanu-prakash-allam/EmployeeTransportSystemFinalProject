@@ -2,15 +2,13 @@ package com.transport.shedulerservice.service;
 
 import java.util.List;
 
-import com.transport.shedulerservice.model.EmployeeData;
-
+import com.transport.shedulerservice.model.DataServiceModel;
 public interface ShedulerServiceInterface {
 	
- // public void modifyStatus();
   
-  public List<EmployeeData> filterEmployeeRequests(List<EmployeeData> employeeDataList);
+  public List<DataServiceModel> filterEmployeeRequests(List<DataServiceModel> employeeDataList);
   
-  public List<EmployeeData> getAllRequests();
+  public List<DataServiceModel> getAllRequests();
   
   public String autoAproveBatchProcessing();
 }

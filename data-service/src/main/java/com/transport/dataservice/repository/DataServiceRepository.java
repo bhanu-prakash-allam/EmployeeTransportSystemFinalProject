@@ -15,7 +15,7 @@ public interface DataServiceRepository extends JpaRepository<EmployeeData,Intege
 
 	
 	
-	public EmployeeData findByEmpId(Integer Id);
+	public EmployeeData findByEmpId(Integer id);
 	
 	public List<EmployeeData> findAll();
 	

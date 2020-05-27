@@ -1,4 +1,4 @@
-package com.transport.intakeservice.intakeserviceconfig;
+package com.transport.shedulerservice.sdhedulerconfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	PasswordEncoder encoder=PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	
 	@Autowired
-	IntakeConfig properties;
+	ShedulerConfig properties;
 	
 	@Override
 	 protected void configure(HttpSecurity http) throws Exception {

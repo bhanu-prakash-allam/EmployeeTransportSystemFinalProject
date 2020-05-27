@@ -1,10 +1,7 @@
 package com.transport.dataservice.dataservicecontroller;
 
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.transport.dataservice.dataservice.DataServiceInterface;
-import com.transport.dataservice.entity.EmployeeData;
+import com.transport.dataservice.model.DataServiceModel;
+import com.transport.dataservice.repository.DataServiceJdbcRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,28 +27,31 @@ public class DataServiceController {
 	@Autowired
     private DataServiceInterface dataServiceInterface;
 	
+	@Autowired
+	DataServiceJdbcRepository dataServiceJdbcRepository;
+	
 	@GetMapping("/requests")
-	public ResponseEntity<List<EmployeeData>> findEmplyeeRequests()
+	public ResponseEntity<List<DataServiceModel>> findEmplyeeRequests()
 	{
 		
-		log.info("user requested"+Thread.currentThread().getName());
-		return new ResponseEntity<List<EmployeeData>>(this.dataServiceInterface.findAllRequests(),HttpStatus.OK);
+		log.info("getting all employee requests requested");
+		return new ResponseEntity<List<DataServiceModel>>(this.dataServiceInterface.findAllRequests(),HttpStatus.OK);
 		
 	}
 	
 	@GetMapping("/requests/{empid}")
-	public ResponseEntity<EmployeeData> findEmpById(@PathVariable Integer empid)
+	public ResponseEntity<DataServiceModel> findEmpById(@PathVariable Integer empid)
 	{
 		
-		//log.info("user requested"+Thread.currentThread().getName()+"the user is "+request.getHeader("Autherization"));
-		return new ResponseEntity<EmployeeData>(this.dataServiceInterface.findRequestByEmpId(empid),HttpStatus.OK);		
+		log.info("employee request by id");
+		return new ResponseEntity<DataServiceModel>(this.dataServiceInterface.findRequestByEmpId(empid),HttpStatus.OK);		
 		
 	}
 	@PostMapping("/save")
-	public ResponseEntity<EmployeeData> saveData(@RequestBody EmployeeData employeeData)
+	public ResponseEntity<DataServiceModel> saveData(@RequestBody DataServiceModel dataServiceModel)
 	{
 	 
-		return new ResponseEntity<EmployeeData>(this.dataServiceInterface.saveEmployeeRequest(employeeData),HttpStatus.OK);
+		return new ResponseEntity<DataServiceModel>(this.dataServiceInterface.saveEmployeeRequest(dataServiceModel),HttpStatus.OK);
 		
 	}
 	@DeleteMapping("/delete/request/{empId}")
@@ -60,19 +61,12 @@ public class DataServiceController {
 	}
 	
 	@PostMapping("/change/batchRequests")
-	public ResponseEntity<String> autoApproveRequest(@RequestBody List<EmployeeData> modifyData)
+	public ResponseEntity<String> autoApproveRequest(@RequestBody List<DataServiceModel> modifyData)
 	{
 		this.dataServiceInterface.modifyBatchRequests(modifyData);
 		
 		return new ResponseEntity<String>("all requested modified",HttpStatus.OK);
 	}
-	@GetMapping("/edit/status")
-	public String editStatus()
-	{
-		this.dataServiceInterface.changeStatus();
-		return "changed";
-	}
-	
 	
 	
 	

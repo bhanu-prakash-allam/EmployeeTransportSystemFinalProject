@@ -1,21 +1,20 @@
 package com.transport.dataservice.dataservice;
 
 import java.util.List;
-
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ParameterizedPreparedStatementSetter;
 import org.springframework.stereotype.Service;
-
+import com.transport.dataservice.dataserviceconfig.DataServiceConfig;
 import com.transport.dataservice.entity.EmployeeData;
 import com.transport.dataservice.exception.RequestNotFoundException;
+import com.transport.dataservice.model.DataServiceModel;
+import com.transport.dataservice.repository.DataServiceJdbcRepository;
 import com.transport.dataservice.repository.DataServiceRepository;
-
-import lombok.Data;
-
+import lombok.extern.slf4j.Slf4j;
 @Service
-@Data
+@Slf4j
 public class DataServiceInterfaceImpl implements DataServiceInterface {
 
 	
@@ -23,45 +22,91 @@ public class DataServiceInterfaceImpl implements DataServiceInterface {
 	private DataServiceRepository dataServiceRepository;
 	
 	@Autowired
+	private DataServiceJdbcRepository dataServiceJdbcRepository;
+	
+	@Autowired
 	JdbcTemplate jdbcTemplate;
 	
-	//@Value("spring.update")
-	String query="UPDATE employee_data SET status='process' WHERE emp_id=?";
+	@Autowired
+	DataServiceConfig properties;
 	
 	@Override
-	public List<EmployeeData> findAllRequests() {
+	public List<DataServiceModel> findAllRequests() {
 		
-		if(this.dataServiceRepository.findAll().size()>0)
-				return this.dataServiceRepository.findAll();
-		else
-			throw new RequestNotFoundException("No Employee Record Found");
-	}
-
-	@Override
-	public EmployeeData findRequestByEmpId(Integer empId) {
 		
-		EmployeeData employeeData=this.dataServiceRepository.findByEmpId(empId);
-		if(employeeData!=null)
+		if(properties.getKey().equals("Y"))
 		{
-		
-		return employeeData;
+			log.info("Spring DataJpa is executing");
+			if(this.dataServiceRepository.findAll().isEmpty())
+				throw new RequestNotFoundException("No Employee Record Found");
+			else
+				return this.dataServiceRepository.findAll().stream().map(data->
+					
+					 new DataServiceModel(data.getEmpId(),data.getPickupLocation(),data.getDropLocation(),data.getStatus())
+					
+				).collect(Collectors.toList());
+			
 		}
 		
 		else
-			throw new RequestNotFoundException("No request Available for this Id "+empId);
+		{
+			log.info("jdbcTemplate is executing");
+			if(this.dataServiceJdbcRepository.findAllRequests().isEmpty())
+				throw new RequestNotFoundException("No Employee Record Found");
+				
+			else	
+				return this.dataServiceRepository.findAll().stream().map(data->
+				
+					 new DataServiceModel(data.getEmpId(),data.getPickupLocation(),data.getDropLocation(),data.getStatus())
+					
+				).collect(Collectors.toList());
+		}
+			
 	}
 
 	@Override
-	public EmployeeData saveEmployeeRequest(EmployeeData employeeData) {
+	public DataServiceModel findRequestByEmpId(Integer empId) {
 		
-		 this.dataServiceRepository.save(employeeData);
-		 if(employeeData.getDropLocation()!=null||employeeData.getPickupLocation()!=null)
+		EmployeeData employeeData=null;
+		if(properties.getKey().equals("Y"))
+		{
+			 employeeData=this.dataServiceRepository.findByEmpId(empId);
+			
+		}
+		else
+			 employeeData=this.dataServiceJdbcRepository.findRequestByEmpId(empId);	
+		
+		 if(employeeData!=null)	
+			 return new DataServiceModel(employeeData.getEmpId(),employeeData.getPickupLocation(),employeeData.getDropLocation(),employeeData.getStatus());
+		else
+		{
+			log.info("throw exception");
+			throw new RequestNotFoundException("No request Available for this Id "+empId);
+		}
+		
+	}
+
+	@Override
+	public DataServiceModel saveEmployeeRequest(DataServiceModel dataServiceModel) {
+		
+		EmployeeData employeeData=new EmployeeData();
+		employeeData.setEmpId(dataServiceModel.getEmpId());
+		employeeData.setPickupLocation(dataServiceModel.getPicupLocation());
+		employeeData.setDropLocation(dataServiceModel.getDropLocation());
+		employeeData.setStatus("requested");
+		 if(employeeData.getDropLocation()!=null&&employeeData.getPickupLocation()!=null)
 			{
-			 this.dataServiceRepository.save(employeeData);
-			 return employeeData;
+				 if(properties.getKey().equals("Y"))
+				 {
+					 this.dataServiceRepository.save(employeeData);
+				 }
+				 else
+					 this.dataServiceJdbcRepository.saveEmployeeRequest(employeeData);
+				 
+				return  dataServiceModel;
 			}
 		 else
-			throw new RuntimeException("Could not add record!!!");
+			throw new RuntimeException("fill  picup and drop locations!!!");
 	}
 	
 
@@ -75,16 +120,23 @@ public class DataServiceInterfaceImpl implements DataServiceInterface {
 	@Override
 	public Boolean deleteRequest(Integer id) {
 		
-	 this.dataServiceRepository.deleteEmployeeRequest(id);
+		 if(properties.getKey().equals("Y"))
+		 {
+			 this.dataServiceRepository.deleteEmployeeRequest(id);
+		 }
+		 else
+			 this.dataServiceJdbcRepository.deleteEmployeeRequest(id);
+	 
 	 
 	 return true;
 	}
 
 	@Override
-	public void modifyBatchRequests(List<EmployeeData> requestData) {
+	public void modifyBatchRequests(List<DataServiceModel> requestData) {
 		 int batchSize=50;
-		 ParameterizedPreparedStatementSetter<EmployeeData> parameterizedPreparedStatementSetter = (ps,req) -> {ps.setInt(1, req.getEmpId());};
-			jdbcTemplate.batchUpdate(query, requestData, batchSize, parameterizedPreparedStatementSetter);
+		 ParameterizedPreparedStatementSetter<DataServiceModel> parameterizedPreparedStatementSetter = (ps,req) -> ps.setInt(1, req.getEmpId());
+		jdbcTemplate.batchUpdate(properties.getBatchQuery(), requestData, batchSize, parameterizedPreparedStatementSetter);
+		
 	}
 
 }

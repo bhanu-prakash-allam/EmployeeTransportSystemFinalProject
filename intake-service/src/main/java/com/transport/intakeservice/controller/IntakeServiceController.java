@@ -14,18 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.transport.intakeservice.exception.RequestNotFoundException;
-import com.transport.intakeservice.model.EmployeeData;
+import com.transport.intakeservice.model.DataServiceModel;
 import com.transport.intakeservice.service.IntakeServiceInterface;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-
 @RestController
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class IntakeServiceController {
 
 	
@@ -35,26 +27,26 @@ public class IntakeServiceController {
 	
 	@HystrixCommand(fallbackMethod ="getEmpRequestsFallBackMethod",ignoreExceptions =RequestNotFoundException.class)
 	@GetMapping("/employee/requests")
-	public ResponseEntity<List<EmployeeData>> findAllRequests()
+	public ResponseEntity<List<DataServiceModel>> findAllRequests()
 	{
 		
-	   return new ResponseEntity<List<EmployeeData>>(this.intakeServiceInterface.getAllRequests(),HttpStatus.OK);
+	   return new ResponseEntity<List<DataServiceModel>>(this.intakeServiceInterface.getAllRequests(),HttpStatus.OK);
 	}
 	
-	@HystrixCommand(fallbackMethod ="getRequestByIdFallBackMethod",ignoreExceptions =RequestNotFoundException.class)
+	@HystrixCommand(fallbackMethod ="getRequestByIdFallBackMethod",ignoreExceptions = {RequestNotFoundException.class,Exception.class})
 	@GetMapping("/request/{eid}")
-	public ResponseEntity<EmployeeData> getEmpById(@PathVariable Integer eid)
+	public ResponseEntity<DataServiceModel> getEmpById(@PathVariable Integer eid)
 	{
 
-		return new ResponseEntity<EmployeeData>(this.intakeServiceInterface.findEmployeeById(eid),HttpStatus.OK);
+		return new ResponseEntity<DataServiceModel>(this.intakeServiceInterface.findEmployeeById(eid),HttpStatus.OK);
 	}
 	
 	@HystrixCommand(fallbackMethod ="postEmpFallBackMethod",ignoreExceptions =RuntimeException.class)
 	@PostMapping("/save/request")
-	public ResponseEntity<EmployeeData> saveRequest(@RequestBody EmployeeData employeeData)
+	public ResponseEntity<DataServiceModel> saveRequest(@RequestBody DataServiceModel employeeData)
 	{
 		
-		return new ResponseEntity<EmployeeData>(this.intakeServiceInterface.saveEmployeeRequest(employeeData),HttpStatus.OK);
+		return new ResponseEntity<DataServiceModel>(this.intakeServiceInterface.saveEmployeeRequest(employeeData),HttpStatus.OK);
 	}
 	
 	@HystrixCommand(fallbackMethod ="deleteFallBackMethod")
@@ -66,21 +58,21 @@ public class IntakeServiceController {
 	
 	//Fallback Methods
 	
-	public ResponseEntity<EmployeeData> postEmpFallBackMethod(EmployeeData employeeData)
+	public ResponseEntity<DataServiceModel> postEmpFallBackMethod(DataServiceModel employeeData)
 	{
-		return new ResponseEntity<EmployeeData>(new EmployeeData( 0,0,"service call failld","default","default"),HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<DataServiceModel>(new DataServiceModel( 0,"service call failld","try another time","failled"),HttpStatus.INTERNAL_SERVER_ERROR);
 		
 	}
-		public ResponseEntity<List<EmployeeData>> getEmpRequestsFallBackMethod()
+		public ResponseEntity<List<DataServiceModel>> getEmpRequestsFallBackMethod()
 		{
-			List<EmployeeData> employeeDataList =new ArrayList<EmployeeData>();
-			employeeDataList.add(new EmployeeData(0,0000,"No Employee found","Service request failled","default"));
-			return new  ResponseEntity<List<EmployeeData>>(employeeDataList,HttpStatus.INTERNAL_SERVER_ERROR);
+			List<DataServiceModel> employeeDataList =new ArrayList<DataServiceModel>();
+			employeeDataList.add(new DataServiceModel(0000,"No Employee found","Service request failled","failled"));
+			return new  ResponseEntity<List<DataServiceModel>>(employeeDataList,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-	public ResponseEntity<EmployeeData> getRequestByIdFallBackMethod(Integer eid)
+	public ResponseEntity<DataServiceModel> getRequestByIdFallBackMethod(Integer eid)
 	{
-		return new ResponseEntity<EmployeeData>(new EmployeeData(1,0,"service call failled","default","default"),HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<DataServiceModel>(new DataServiceModel(0,"service call failled","default","default"),HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	public ResponseEntity<Boolean> deleteFallBackMethod(Integer empId)
